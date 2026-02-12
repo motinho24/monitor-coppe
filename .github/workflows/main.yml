@@ -20,7 +20,7 @@ jobs:
 
     - name: Run script
       run: |
-        pip install requests
+        pip install requests beautifulsoup4
         python monitor.py
 
     - name: Commit changes
