@@ -11,7 +11,7 @@ HEADERS = {
 }
 
 def get_trophies():
-    response = requests.get(URL, headers=HEADERS)
+    response = requests.get(URL, headers=HEADERS, timeout=30)
     soup = BeautifulSoup(response.text, "html.parser")
 
     # Cerca il <p> con classe corretta
@@ -48,11 +48,12 @@ def save_data(current):
 
 def main():
     trophies = get_trophies()
-    if trophies:
+    if trophies is not None:
         save_data(trophies)
     else:
         print("Errore: coppe non trovate")
 
 if __name__ == "__main__":
     main()
+
 
