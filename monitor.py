@@ -1,27 +1,16 @@
 import requests
-from bs4 import BeautifulSoup
 import csv
 import os
 from datetime import datetime
 
-URL = "https://brawlify.com/club/80R90R0UL"
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0"
-}
+API_URL = "https://api.brawlify.com/v1/club/80R90R0UL"
 
 def get_trophies():
-    response = requests.get(URL, headers=HEADERS, timeout=30)
-    soup = BeautifulSoup(response.text, "html.parser")
+    response = requests.get(API_URL, timeout=30)
+    data = response.json()
 
-    # Cerca il <p> con classe corretta
-    trophy_tag = soup.find("p", class_="text-brawl-gold font-bold")
-
-    if trophy_tag:
-        trophies = trophy_tag.text.strip().replace(",", "")
-        return int(trophies)
-
-    return None
+    # Qui prendiamo direttamente il valore corretto
+    return data.get("trophies")
 
 def save_data(current):
     file_exists = os.path.isfile("storico_coppe.csv")
@@ -48,12 +37,15 @@ def save_data(current):
 
 def main():
     trophies = get_trophies()
+
     if trophies is not None:
         save_data(trophies)
     else:
-        print("Errore: coppe non trovate")
+        print("Errore: dati non ricevuti")
 
 if __name__ == "__main__":
     main()
+
+
 
 
